@@ -1,22 +1,30 @@
 import numpy as np
 from numpy.core.multiarray import ndarray
 
+def tofloat(value):
+    """Prend une valeur du tableau de données et transforme les ',' en '.' et change
+    la valeur en float """
+    value_fin = ""
+    for nb in value :
+        if nb is ',':
+            nb = "."
+        value_fin += nb
+    return float(value_fin)
+
 scores_file = open("Scores_3DHigh_NN.txt")
 
+nb_lignes = 60
+nb_colonnes = 16
 # Creation des tableaux de valeurs
-quality_continuous_tab = np.zeros((59, 16))
-quality_5levels_tab = np.zeros((59, 16))
-depth_continuous_tab = np.zeros((59, 16))
-depth_5levels_tab = np.zeros((59, 16))
+quality_continuous_tab = np.zeros((60, 16))
+quality_5levels_tab = np.zeros((60, 16))
+depth_continuous_tab = np.zeros((60, 16))
+depth_5levels_tab = np.zeros((60, 16))
+comfort_continuous_tab = np.zeros((60, 16))
+comfort_5levels_tab = np.zeros((60, 16))
 
-lines_to_keep = range(4, 6)
-
-values_1st_array = range(3,19)
-values_2nd_array = range(21, 37)
-values_3rd_array = range(39, 55)
-
-line_nb=0
-for line in scores_file:
+line_index=0
+for line in scores_file :
     #print("line nb", line_nb, " : ", line)
 
 #    if line_nb > 4 and line_nb < 65 :
@@ -26,29 +34,25 @@ for line in scores_file:
 #        for nb in numbers_line_5:
 #            print(nb)
 
+    values = line.split()
+    value_index = 0
+    for value in values[3:] : #3 correspond au nombre de valeurs qui n'ont pas d'utilité ici (age, sexe)
+        if line_index < nb_lignes : # evaluation de facon continue
+            if value_index < nb_colonnes :
+                quality_continuous_tab[line_index, value_index] = tofloat(value)
+            elif value_index < 2*nb_colonnes :
+                depth_continuous_tab[line_index, value_index - nb_colonnes ] = tofloat(value)
+            else :
+                comfort_continuous_tab[line_index, value_index - 2*nb_colonnes ] = tofloat(value)
 
-    if line_nb in lines_to_keep :
-        values = line.split()
-        print("line nb " + line_nb.__str__() + " : ", end= '')
-        #On regarde les valeurs de la ligne si on l'a gardé
-        value_nb = 0
-        for value in values :
-            if value_nb in values_1st_array :
-
-                #quality_continuous_tab[line_nb, value_nb-3] = float(value)
-                print(value, end=' ' )
-
-            if value_nb in values_2nd_array :
-                print(value, end=' ' )
-
-            if value_nb in values_3rd_array :
-                print(value, end=' ' )
-            value_nb += 1
-
-        print() #saut de ligne après avoir affiché toutes les valeurs de la ligne
-
-    line_nb += 1
-#print(quality_continuous_tab)
-#print(scores_file.read()) #read(n) : donne les n premiers caractères de la chaine
-
-#scores_file.close()
+        elif line_index < nb_lignes*2+1:  # evaluation sur 5 niveaux
+            if value_index < nb_colonnes  :
+                quality_5levels_tab[int((line_index-1)-nb_lignes), value_index] = tofloat(value)
+            elif value_index < 2*nb_colonnes  :
+                depth_5levels_tab[int((line_index-1)-nb_lignes), value_index - nb_colonnes ] = tofloat(value)
+            else :
+                comfort_5levels_tab[int((line_index-1)-nb_lignes), value_index - 2*nb_colonnes ] = tofloat(value)
+        #On peut garder les 3 derniers tableaux ici
+        value_index += 1
+    line_index += 1
+print(comfort_continuous_tab)
