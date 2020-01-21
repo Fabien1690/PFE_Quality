@@ -3,9 +3,9 @@ import numpy as np
 # import theano
 
 import tabopen
-# from keras.models import Sequential
-# from keras.layers import Dense, Dropout, Activation, Flatten
-# from keras.layers import Convolution2D, MaxPooling2D, convolutional
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation, Flatten
+from keras.layers import Convolution2D, MaxPooling2D, convolutional
 from keras.utils import np_utils
 # from keras.datasets import mnist
 print ("--------fin import--------")
@@ -87,7 +87,7 @@ tab_tests = Q_C_tab[41:,:] #On garde les 20 dernières pour le test
 
 #--------------Début Deep Learning--------------------------------------------------------------------
 print ("Début deep learning")
-np.random.seed(123)
+np.random.seed(124)
 
 #On change le format des données pour que cela fasse des vecteurs "one-hot"
 
@@ -95,6 +95,28 @@ X_train = create_one_hot_vec(X_train, 100)
 X_test = create_one_hot_vec(X_test, 100)
 y_train = create_one_hot_vec(y_train, 5)
 y_test = create_one_hot_vec(y_test, 5)
+print("Tableaux créés")
+
+#Architecture du modèle
+model = Sequential([
+    Dense(32, input_dim=100),
+    Activation  ('relu'),
+    Dense(64, activation='relu'),
+    Dropout(0.5),
+    Dense (5),
+    Activation('softmax'),
+])
+
+#Compile model
+model.compile(loss='categorical_crossentropy',
+              optimizer='adam',
+              metrics=['accuracy'])
+
+model.fit(X_train, y_train, batch_size=32, epochs=20, verbose=1)
+
+score = model.evaluate(X_test, y_test, verbose=0)
+
+print("Score final : " + str(score))
 
 print("Fin")
 
