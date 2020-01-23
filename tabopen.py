@@ -1,5 +1,4 @@
 import numpy as np
-from numpy.core.multiarray import ndarray
 
 def tofloat(value):
     """Prend une valeur du tableau de données et transforme les ',' en '.' et change
@@ -9,7 +8,12 @@ def tofloat(value):
         if nb == ',':
             nb = "."
         value_fin += nb
-    return float(value_fin)
+    try :
+        return float(value_fin)
+    except :
+        print("Erreur : Valeur \"" + value + "\" non entière.")
+        return 0
+
 
 def création_tab(
         quality_continuous_tab = np.zeros((60, 16)),
@@ -27,8 +31,8 @@ def création_tab(
 
     nb_lignes = 60
     nb_colonnes = 16
-    # Creation des tableaux de valeurs
 
+    # Creation des tableaux de valeurs
     line_index=0
     for line in scores_file :
         values = line.split()
@@ -41,7 +45,6 @@ def création_tab(
                     depth_continuous_tab[line_index, value_index - nb_colonnes ] = tofloat(value)*0.99
                 else :
                     comfort_continuous_tab[line_index, value_index - 2*nb_colonnes ] = tofloat(value)*0.99
-
             elif line_index < nb_lignes*2+1:  # evaluation sur 5 niveaux
                 if value_index < nb_colonnes  :
                     quality_5levels_tab[int((line_index-1)-nb_lignes), value_index] = tofloat(value)*0.99
@@ -52,3 +55,53 @@ def création_tab(
             #On peut garder les 3 derniers tableaux ici
             value_index += 1
         line_index += 1
+    scores_file.close()
+
+def fill_table(tab_in = [], lines_to_remove = []):
+    """
+    Crée une liste contenant les valeurs de tab_in, passées en une seule liste d'entiers
+    :param tab_in: tableau de valeurs, provenant d'un fichier
+    :param lines_to_remove: liste de lignes à ne pas considérer
+    :return tableau rempli
+    """
+    tab_out = []
+    line_index = 0
+    for line in tab_in:
+        values = line.split()
+        if line_index not in lines_to_remove:  # On retire les lignes séparatrices
+            for value in values:
+                tab_out = np.concatenate((tab_out, [tofloat(value)]))
+        line_index = line_index + 1
+    return tab_out
+
+def création_orga_tab(path) :
+    """
+    Crée la table à partir des données n°2
+    :param path: ["Scores_continuous.txt","Scores_discrete.txt"]chemin vers la source
+    :return tab_resultats:tableau où seront stockées les données
+    """
+    #Ouverture des tables
+    # scores_continuous = open("Scores_continuous.txt")
+    # scores_discrete = open("Scores_discrete.txt")
+    if path not in ["Scores_continuous.txt", "Scores_discrete.txt"] :
+        raise FileNotFoundError("Chemin de fichier non valide.")
+    Score = open(path)
+    if path == "Scores_continuous.txt" :
+        lines_to_remove = [0, 53, 112, 173]
+    else :
+        lines_to_remove = [0, 52, 105, 156]
+    tab_resultats = fill_table(tab_in=Score, lines_to_remove=lines_to_remove)
+    tab_resultats = np.sort(tab_resultats)
+    Score.close()
+    return tab_resultats
+
+
+#Tests
+# tab_résultats = création_orga_tab(path="Scores_continuous.txt")
+# tab_données = création_orga_tab(path="Scores_discrete.txt")
+# print(tab_résultats[:100])
+# print("Tableau2 : ")
+# print(tab_données[:100])
+
+#Les deux tableaux sont maintenant des vecteurs triées. Leur taille doit être réglée.
+

@@ -29,6 +29,12 @@ tabopen.création_tab(quality_continuous_tab=Q_C_tab,
                      depth_continuous_tab=D_C_tab,
                      depth_5levels_tab=D_5_tab)
 
+#Choix valeurs limites utilisées dans choix_valeurs():
+VALEUR1=20
+VALEUR2=40
+VALEUR3=60
+VALEUR4=80
+
 def choix_valeurs(val) :
     """
     Donne le score dans l'echelle de 5 niveaux, allant de 0 à 4
@@ -38,13 +44,13 @@ def choix_valeurs(val) :
         valeur allant de 0 à 100 qui va être convertie en int allant de 0 à 4
     """
     choix = 0
-    if val <= 20 :
+    if val <= VALEUR1 :
         choix = 0
-    elif val <= 40 :
+    elif val <= VALEUR2 :
         choix = 1
-    elif val <= 60 :
+    elif val <= VALEUR3 :
         choix = 2
-    elif val <= 80 :
+    elif val <= VALEUR4 :
         choix = 3
     else :
         choix = 4
@@ -112,7 +118,7 @@ model.compile(loss='categorical_crossentropy',
               optimizer='adam',
               metrics=['accuracy'])
 
-model.fit(X_train, y_train, batch_size=32, epochs=20, verbose=1)
+model.fit(X_train, y_train, batch_size=32, epochs=1, verbose=1)
 
 score = model.evaluate(X_test, y_test, verbose=0)
 
