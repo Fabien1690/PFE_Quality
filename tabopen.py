@@ -92,16 +92,37 @@ def création_orga_tab(path) :
         lines_to_remove = [0, 52, 105, 156]
     tab_resultats = fill_table(tab_in=Score, lines_to_remove=lines_to_remove)
     tab_resultats = np.sort(tab_resultats)
+
     Score.close()
     return tab_resultats
 
+def allonge_list(list, longueur_voulue) :
+    try :
+        assert (len(list)<longueur_voulue)
+    except AssertionError :
+        print("La longueur souhaitée doit être supérieure à celle de la liste entrée")
+    list_out = []
+    longueur= len(list)
+    add_ratio = longueur_voulue/longueur
+    Qte_nombre = []
+    for number in range(int(np.max(list))+ 1):
+        Qte_nombre.append(number-100) #On fait attention que le numéro ne soit pas le max
+        Qte_nombre.append(list.count(number))
+        for i in range(int(list.count(number)*add_ratio)):
+            list_out.append(number)
+    while (list_out.__len__()<longueur_voulue) : #On rajoute une valeur pour les numéros les plus nombreux
+        m = Qte_nombre.index(max(Qte_nombre)) # m-1 : numero le plus représenté (+- 100), m : la qantité du nombre
+        list_out.append(Qte_nombre[m-1]+100)
+        Qte_nombre.remove(Qte_nombre[m-1])
+        Qte_nombre.remove(Qte_nombre[m-1])
+    return(list_out)
+
 
 #Tests
-# tab_résultats = création_orga_tab(path="Scores_continuous.txt")
-# tab_données = création_orga_tab(path="Scores_discrete.txt")
-# print(tab_résultats[:100])
-# print("Tableau2 : ")
-# print(tab_données[:100])
 
-#Les deux tableaux sont maintenant des vecteurs triées. Leur taille doit être réglée.
+
+# random_tab = [i for i in range()]
+# np.random.shuffle(random_tab)
+
+
 

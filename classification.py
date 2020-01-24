@@ -1,11 +1,11 @@
 import numpy as np
 # import nose
-# import theano
+import theano
 
 import tabopen
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
-from keras.layers import Convolution2D, MaxPooling2D, convolutional
+# from keras.layers import Convolution2D, MaxPooling2D, convolutional
 from keras.utils import np_utils
 # from keras.datasets import mnist
 print ("--------fin import--------")
@@ -74,7 +74,7 @@ def create_one_hot_vec(tab, max_val) :
     :param tab: tableau d'entiers
     :param max_val: {5, 100} Valeur maximale du tableau.
         Pour un tableau de valeurs continues, prendre max_val = 100,
-        pour un tableau de valeurs allant de 0 ä 4, prendre max_val = 5
+        pour un tableau de valeurs allant de 0 à 4, prendre max_val = 5
     :return: tab_out : tableau en "one-hot vector".
     """
     tab_out = np.zeros(tab.size) #crée un tableau de la taille necessaire
