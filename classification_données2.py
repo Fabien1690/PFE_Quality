@@ -6,6 +6,9 @@ from keras.layers import Dense, Dropout, Activation, Flatten
 # from keras.layers import Convolution2D, MaxPooling2D, convolutional
 # from keras.datasets import mnist
 
+print ("--------fin import--------")
+
+
 def create_one_hot_vec(tab, max_val) :
     """
     :param tab: tableau d'entiers
@@ -40,7 +43,7 @@ np.random.shuffle(random_tab)
 tab_données = [tab_données[i] for i in random_tab]
 tab_résultats = [tab_résultats[i] for i in random_tab]
 
-demarcation = int(tab_données.__len__())
+demarcation = int(tab_données.__len__()*0.7)
 tab_résultats_entrainement = tab_résultats[:demarcation]
 tab_données_entrainement = tab_données[:demarcation]
 
@@ -51,6 +54,8 @@ tab_données_entrainement = create_one_hot_vec(tab_données_entrainement, 100)
 tab_résultats_entrainement = create_one_hot_vec(tab_résultats_entrainement, 5)
 tab_données_verification = create_one_hot_vec(tab_données_verification, 100)
 tab_résultats_verification = create_one_hot_vec(tab_résultats_verification, 5)
+
+print("Tableaux créés")
 
 model = Sequential([
     Dense(32, input_dim=100),
@@ -67,7 +72,7 @@ model.compile(loss='categorical_crossentropy',
               metrics=['accuracy'])
 
 
-model.fit(tab_données_entrainement, tab_résultats_entrainement, batch_size=32, epochs=1, verbose=0)
+model.fit(tab_données_entrainement, tab_résultats_entrainement, batch_size=32, epochs=15, verbose=1)
 
 score = model.evaluate(tab_données_verification, tab_résultats_verification, verbose=1)
 
