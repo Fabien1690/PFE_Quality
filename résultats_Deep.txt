@@ -38,5 +38,23 @@ seed 124 : Score final : [0.18532493607582232, 0.9375]
 Same on D_C : (seed 123)
 Score final : [0.030761849331228358, 0.9934210777282715] (Very good results!!!!!)
 
+------------------------------------------------------
+------------------------------------------------------
 
+Données 2
+model = Sequential([
+    Dense(32, input_dim=100),
+    Activation  ('relu'),
+    Dense(64, activation='relu'),
+    Dropout(0.2),
+    Dense (5),
+    Activation('softmax'),
+])
+
+#Compile model
+model.compile(loss='categorical_crossentropy',
+              optimizer='adam',
+              metrics=['accuracy'])
+15 epochs
+Score final : [0.09485191212468773, 0.9470376968383789]
 
