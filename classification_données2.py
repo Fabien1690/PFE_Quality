@@ -90,7 +90,10 @@ predictions_precise = model.predict(pred_input__one_hot, batch_size=10)
 #----------Tracé de la courbe------------------
 print("----Tracé de la courbe----")
 fig, ax=plt.subplots()
-ax.plot(pred_input,rounded_predictions, marker='.', linewidth=1)
+ax.plot(pred_input,np.add(rounded_predictions,1),'C0o', alpha = 0.5)
+ax.step(pred_input,np.add(rounded_predictions,1),where='post')
+ax.axis([0,101,.8,5.2])
+plt.title("Repartition des valeurs dans le réseau de neurone")
 missing_data = [0]
 for i in range (100):
     if i in tab_résultats:
