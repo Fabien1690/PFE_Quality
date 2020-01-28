@@ -57,7 +57,7 @@ def création_tab(
         line_index += 1
     scores_file.close()
 
-def fill_table(tab_in = [], lines_to_remove = []):
+def fill_table(tab_in = [], lines_to_remove = [], line_min=0, line_max=0):
     """
     Crée une liste contenant les valeurs de tab_in, passées en une seule liste d'entiers
     :param tab_in: tableau de valeurs, provenant d'un fichier
@@ -67,14 +67,15 @@ def fill_table(tab_in = [], lines_to_remove = []):
     tab_out = []
     line_index = 0
     for line in tab_in:
-        values = line.split()
-        if line_index not in lines_to_remove:  # On retire les lignes séparatrices
-            for value in values:
-                tab_out = np.concatenate((tab_out, [tofloat(value)]))
+        if line_index > line_min and line_index < line_max:
+            values = line.split()
+            if line_index not in lines_to_remove:  # On retire les lignes séparatrices
+                for value in values:
+                    tab_out = np.concatenate((tab_out, [tofloat(value)]))
         line_index = line_index + 1
     return tab_out
 
-def création_orga_tab(path) :
+def création_orga_tab(path, min_line=0, max_line=1) :
     """
     Crée la table à partir des données n°2
     :param path: ["Scores_continuous.txt","Scores_discrete.txt"]chemin vers la source
@@ -90,7 +91,7 @@ def création_orga_tab(path) :
         lines_to_remove = [0, 53, 112, 173]
     else :
         lines_to_remove = [0, 52, 105, 156]
-    tab_resultats = fill_table(tab_in=Score, lines_to_remove=lines_to_remove)
+    tab_resultats = fill_table(tab_in=Score, lines_to_remove=lines_to_remove, line_min= min_line, line_max=max_line)
     tab_resultats = np.sort(tab_resultats)
 
     Score.close()

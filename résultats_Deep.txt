@@ -86,3 +86,23 @@ Rsultats précis :
  [2.65201204e-03 9.96438026e-01 5.54189901e-04 2.77013838e-04 7.87036406e-05]
  [8.63237772e-03 9.88319635e-01 7.64073629e-04 1.71833311e-03 5.65688242e-04]
  [7.83199037e-04 9.98975992e-01 7.56268855e-05 1.47545463e-04 1.75873756e-05]]
+
+
+----------------Individuels-------------------------
+--3DHigh--
+
+--2DHigh--
+
+--3DLow--
+loss: 0.5025 - accuracy: 0.9140
+loss: 0.2564 - accuracy: 0.9382
+model = Sequential([
+    Dense(30, input_dim=100),
+    Activation('relu'),
+    Dense(10, activation='tanh'),
+    Dropout(0.2),
+    Dense (4),
+    Activation('softmax'),
+])
+--2DLow--
+loss: 0.0994 - accuracy: 0.9738
